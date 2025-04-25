@@ -14,6 +14,9 @@ importers:
       '@hono/zod-validator':
         specifier: ^0.4.3
         version: 0.4.3(hono@4.7.7)(zod@3.24.3)
+      dotenv:
+        specifier: ^16.5.0
+        version: 16.5.0
       fs-extra:
         specifier: ^11.3.0
         version: 11.3.0
@@ -438,6 +441,10 @@ packages:
 
   devtools-protocol@0.0.1425554:
     resolution: {integrity: sha512-uRfxR6Nlzdzt0ihVIkV+sLztKgs7rgquY/Mhcv1YNCWDh5IZgl5mnn2aeEnW5stYTE0wwiF4RYVz8eMEpV1SEw==}
+
+  dotenv@16.5.0:
+    resolution: {integrity: sha512-m/C+AwOAr9/W1UOIZUo232ejMNnJAJtYQjUbHoNTBNTJSvqzzDh7vnrei3o3r3m9blf6ZoDkvcw0VmozNRFJxg==}
+    engines: {node: '>=12'}
 
   emoji-regex@8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
@@ -1263,6 +1270,8 @@ snapshots:
       esprima: 4.0.1
 
   devtools-protocol@0.0.1425554: {}
+
+  dotenv@16.5.0: {}
 
   emoji-regex@8.0.0: {}
 

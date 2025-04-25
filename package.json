@@ -9,6 +9,7 @@
   "dependencies": {
     "@hono/node-server": "^1.14.1",
     "@hono/zod-validator": "^0.4.3",
+    "dotenv": "^16.5.0",
     "fs-extra": "^11.3.0",
     "hono": "^4.7.7",
     "puppeteer": "^24.7.2",
