@@ -15,14 +15,108 @@ export const HomePage: FC = () => {
             const resultDiv = document.querySelector('#result');
 
             let originalBtnText = submitBtn.textContent;
+            let currentImageUrl = null;
+            let checkingImage = false;
+
+            // Function to check if image exists and is loaded
+            const checkImage = (url) => {
+              return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(true);
+                img.onerror = () => resolve(false);
+                img.src = url;
+              });
+            };
+
+            // Function to show loading state
+            const showLoading = (message = 'Processing...') => {
+              submitBtn.disabled = true;
+              submitBtn.innerHTML = \`<span class="inline-flex items-center"><svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>\${message}</span>\`;
+            };
+
+            // Function to restore button state
+            const restoreButton = () => {
+              submitBtn.disabled = false;
+              submitBtn.textContent = originalBtnText;
+            };
+
+            // Function to show the screenshot result
+            const showScreenshot = (imageUrl) => {
+              resultDiv.innerHTML = \`
+                <div class="mt-6 bg-green-50 border border-green-200 rounded-lg p-4">
+                  <div class="flex justify-between items-center mb-2">
+                    <h3 class="text-green-800 font-medium">Screenshot captured successfully!</h3>
+                    <button type="button" onclick="window.checkScreenshotAgain()" class="text-sm bg-green-100 hover:bg-green-200 text-green-800 px-3 py-1 rounded-md transition-colors">
+                      Refresh
+                    </button>
+                  </div>
+                  <div class="relative">
+                    <img src="\${imageUrl}?t=\${Date.now()}" alt="Screenshot" class="rounded-lg shadow-sm w-full" />
+                    <a href="\${imageUrl}" download class="absolute top-2 right-2 bg-white/90 backdrop-blur-sm text-gray-700 hover:text-gray-900 px-3 py-1.5 rounded-md text-sm font-medium shadow-sm hover:shadow transition-all duration-200">
+                      Download
+                    </a>
+                  </div>
+                </div>
+              \`;
+            };
+
+            // Function to show waiting state
+            const showWaiting = (imageUrl) => {
+              resultDiv.innerHTML = \`
+                <div class="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                  <div class="flex justify-between items-center">
+                    <div class="flex items-center">
+                      <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-yellow-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      <span class="text-yellow-800">Waiting for screenshot to be processed...</span>
+                    </div>
+                    <button type="button" onclick="window.checkScreenshotAgain()" class="text-sm bg-yellow-100 hover:bg-yellow-200 text-yellow-800 px-3 py-1 rounded-md transition-colors">
+                      Check Again
+                    </button>
+                  </div>
+                </div>
+              \`;
+            };
+
+            // Function to check screenshot availability
+            const checkScreenshotAvailability = async (imageUrl, retries = 10, interval = 2000) => {
+              if (checkingImage) return;
+              checkingImage = true;
+              currentImageUrl = imageUrl;
+
+              for (let i = 0; i < retries; i++) {
+                const exists = await checkImage(imageUrl + '?t=' + Date.now());
+                if (exists) {
+                  showScreenshot(imageUrl);
+                  checkingImage = false;
+                  return true;
+                }
+                if (i < retries - 1) {
+                  showWaiting(imageUrl);
+                  await new Promise(resolve => setTimeout(resolve, interval));
+                }
+              }
+
+              checkingImage = false;
+              return false;
+            };
+
+            // Expose check function globally for the refresh button
+            window.checkScreenshotAgain = async () => {
+              if (currentImageUrl) {
+                showWaiting(currentImageUrl);
+                await checkScreenshotAvailability(currentImageUrl);
+              }
+            };
 
             form.addEventListener('submit', async (e) => {
               e.preventDefault();
 
               // Reset states
               resultDiv.innerHTML = '';
-              submitBtn.disabled = true;
-              submitBtn.innerHTML = '<span class="inline-flex items-center"><svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Processing...</span>';
+              showLoading();
 
               try {
                 const url = input.value;
@@ -30,17 +124,22 @@ export const HomePage: FC = () => {
                 const data = await response.json();
 
                 if (response.ok) {
-                  resultDiv.innerHTML = \`
-                    <div class="mt-6 bg-green-50 border border-green-200 rounded-lg p-4">
-                      <h3 class="text-green-800 font-medium mb-2">Screenshot captured successfully!</h3>
-                      <div class="relative">
-                        <img src="\${data.url}" alt="Screenshot" class="rounded-lg shadow-sm w-full" />
-                        <a href="\${data.url}" download class="absolute top-2 right-2 bg-white/90 backdrop-blur-sm text-gray-700 hover:text-gray-900 px-3 py-1.5 rounded-md text-sm font-medium shadow-sm hover:shadow transition-all duration-200">
-                          Download
-                        </a>
+                  // Start checking for screenshot availability
+                  showWaiting(data.url);
+                  const imageAvailable = await checkScreenshotAvailability(data.url);
+
+                  if (!imageAvailable) {
+                    resultDiv.innerHTML = \`
+                      <div class="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                        <div class="flex justify-between items-center">
+                          <p class="text-yellow-800">Screenshot is taking longer than expected...</p>
+                          <button type="button" onclick="window.checkScreenshotAgain()" class="text-sm bg-yellow-100 hover:bg-yellow-200 text-yellow-800 px-3 py-1 rounded-md transition-colors">
+                            Try Again
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  \`;
+                    \`;
+                  }
                 } else {
                   throw new Error(data.error || 'Failed to capture screenshot');
                 }
@@ -54,8 +153,7 @@ export const HomePage: FC = () => {
                   </div>
                 \`;
               } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = originalBtnText;
+                restoreButton();
               }
             });
 
