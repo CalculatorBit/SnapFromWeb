@@ -60,6 +60,14 @@ app.get("/screenshot", zValidator("query", screenshotSchema), async (c) => {
   }
   const publicUrl = await getPublicScreenshotUrl(url, c);
 
+  /* check if file exists max 4 seconds, do not use blocking code */
+  const checkScreenshot = async () => {
+    while (!(await fileExists(screenshotPath))) {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+  };
+  await checkScreenshot();
+
   return c.json({ url: publicUrl });
 });
 
