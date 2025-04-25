@@ -1,6 +1,8 @@
 # SnapFromWeb
 Create Screenshot from URL
 
+![Screenshot](public/og.png)
+
 ## Usage
 
 ```bash
