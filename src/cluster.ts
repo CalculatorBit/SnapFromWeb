@@ -19,7 +19,7 @@ const clusterOptions = {
   timeout: 30000, // Increased timeout for slower pages
   retryLimit: 2, // Add retry for failed attempts
   puppeteerOptions: {
-    headless: false,
+    headless: true,
     args: [
       '--no-sandbox',
       '--disable-setuid-sandbox',
