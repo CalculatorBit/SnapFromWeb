@@ -31,7 +31,7 @@ Captures screenshots of one or more web pages.
 For a single URL:
 ```json
 {
-  "url": "https://example.com"
+  "urls":["http://localhost:4321/"]
 }
 ```
 
@@ -49,19 +49,15 @@ For multiple URLs:
 
 ```json
 {
-  "success": true,
-  "data": {
-    "urls": [
-      {
-        "original": "https://example.com",
-        "screenshot": "/i/example.com/hash.png"
-      },
-      {
-        "original": "https://example.org",
-        "error": "Failed to load page"
-      }
-    ]
-  }
+    "success": true,
+    "data": {
+        "urls": [
+            {
+                "original": "http://localhost:4321/",
+                "screenshot": "http://localhost:4321/i/localhost/ee169604f4cebd35817a28306f40ab7fa34409f0eabb32806cdbad7252aabd53.png"
+            }
+        ]
+    }
 }
 ```
 
