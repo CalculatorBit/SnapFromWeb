@@ -1,0 +1,25 @@
+---
+import { Image } from 'astro:assets';
+import logo from '@/assets/images/logo.png';
+---
+
+<nav
+    class="fixed top-6 left-1/2 z-50 -translate-x-1/2 px-6 py-2 rounded-full backdrop-blur-md bg-white/20 shadow-lg flex items-center gap-8 border border-white/30">
+    <a
+        href="/"
+        class="flex items-center gap-2 hover:opacity-80 transition">
+        <Image
+            src={logo}
+            alt="Snap from Web Logo"
+            class="h-6 w-auto rounded-full"
+        />
+        <span class="text-base font-bold font-italic hidden sm:inline">Snap From Web</span>
+    </a>
+    <div class="flex gap-4 ml-4">
+        <a
+            href="/gallery/"
+            class="text-sm text-muted-foreground transition"
+            >Gallery</a
+        >
+    </div>
+</nav>

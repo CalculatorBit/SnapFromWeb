@@ -18,7 +18,7 @@ const clusterOptions = {
   timeout: 30000,
   retryLimit: 2,
   puppeteerOptions: {
-    headless: false,
+    headless: true,
     args: [
       '--no-sandbox',
       '--disable-setuid-sandbox',
