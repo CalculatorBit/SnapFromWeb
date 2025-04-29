@@ -48,16 +48,15 @@ export const POST: APIRoute = async (context) => {
 
     // Initialize cluster
     const cluster = await launchCluster();
-    const results: ScreenshotResult[] = [];
+    let results: ScreenshotResult[] = []; // Initialize as empty array
 
-    // Queue tasks and collect results
+    // Queue tasks and collect results concurrently
     try {
-      for (const url of validUrls) {
-        const result = await cluster.execute(url);
-        results.push(result as ScreenshotResult);
-      }
+      const screenshotPromises = validUrls.map((url: string) => cluster.execute(url));
+      results = (await Promise.all(screenshotPromises)) as ScreenshotResult[];
     } finally {
-      await cluster.close();
+      await cluster.idle(); // Wait for all tasks to finish
+      await cluster.close(); // Then close the cluster
     }
 
     // Format response
