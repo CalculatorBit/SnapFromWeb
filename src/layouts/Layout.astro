@@ -1,5 +1,6 @@
 ---
 import Navigation from '@/components/Navigation.astro';
+import Footer from '@/components/Footer.astro';
 import '@/styles/global.css';
 const { title } = Astro.props;
 ---
@@ -8,10 +9,11 @@ const { title } = Astro.props;
     <head>
         <title>{title}</title>
     </head>
-    <body class="bg-red-10">
+    <body class="bg-red-10 flex flex-col min-h-screen">
         <Navigation />
-        <div class="mt-18">
+        <div class="mt-16 flex-grow">
             <slot />
         </div>
+        <Footer />
     </body>
 </html>
