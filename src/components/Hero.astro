@@ -1,0 +1,18 @@
+---
+import { Image } from 'astro:assets';
+import logo from '@/assets/images/logo.png';
+---
+
+<div class="text-center mb-12">
+  <div class="flex justify-center mb-6">
+    <Image
+      src={logo}
+      alt="Snap from Web Logo"
+      class="h-16 w-auto"
+    />
+  </div>
+  <h1 class="text-4xl font-bold tracking-tight mb-4">Snap from Web</h1>
+  <p class="text-lg text-muted-foreground">
+    Generate high-quality screenshots from any website URL instantly
+  </p>
+</div>

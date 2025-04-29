@@ -5,6 +5,7 @@ dist/
 
 # screenshots directory
 public/i/*
+public/i/
 
 # dependencies
 node_modules/

@@ -1,15 +1,160 @@
 ---
-import { Button } from '@/components/ui/button';
-import { Card, CardHeader, CardTitle } from '@/components/ui/card';
+import { UrlInput } from '@/components/UrlInput';
 import Layout from '@/layouts/Layout.astro';
+
+type ScreenshotResult = {
+	original: string;
+	screenshot?: string;
+	error?: string;
+};
+
+// Define a proper custom event type
+interface UrlSubmitEvent extends Event {
+	detail: string[];
+}
+
+declare global {
+	interface WindowEventMap {
+		urlsubmit: UrlSubmitEvent;
+	}
+}
 ---
 
-<Layout title="Snap from Web">
-	<p>This is a test</p>
-	<Button>Click me</Button>
-	<Card>
-		<CardHeader>
-			<CardTitle>Card Title</CardTitle>
-		</CardHeader>
-	</Card>
+<Layout title="SnapFromWeb - Website Screenshot Tool">
+	<main class="container mx-auto px-4 py-8">
+		<div class="max-w-4xl mx-auto space-y-8">
+			<div class="text-center space-y-4">
+				<h1 class="text-4xl font-bold tracking-tight">SnapFromWeb</h1>
+				<p class="text-xl text-muted-foreground">
+					Capture clean, ad-free screenshots of any website
+				</p>
+			</div>
+
+			<UrlInput client:load />
+
+			<div
+				id="loading"
+				class="text-center py-8 hidden">
+				<div
+					class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+					role="status">
+					<span
+						class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+						>Loading...</span
+					>
+				</div>
+				<p class="mt-4 text-muted-foreground">Capturing screenshots...</p>
+			</div>
+
+			<div
+				id="results"
+				class="space-y-4 hidden">
+				<h2 class="text-2xl font-semibold">Screenshots</h2>
+				<div
+					id="screenshots"
+					class="grid gap-6 md:grid-cols-2">
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<script>
+		type ScreenshotResult = {
+			original: string;
+			screenshot?: string;
+			error?: string;
+		};
+
+		interface UrlSubmitEvent extends Event {
+			detail: string[];
+		}
+
+		const loadingDiv = document.getElementById('loading');
+		const resultsDiv = document.getElementById('results');
+
+		function setLoading(isLoading: boolean) {
+			if (loadingDiv && resultsDiv) {
+				loadingDiv.classList.toggle('hidden', !isLoading);
+				if (isLoading) {
+					resultsDiv.classList.add('hidden');
+				}
+			}
+		}
+
+		// Handle screenshot display
+		function displayScreenshots(results: ScreenshotResult[]) {
+			const screenshotsDiv = document.getElementById('screenshots');
+
+			if (!resultsDiv || !screenshotsDiv) return;
+
+			screenshotsDiv.innerHTML = '';
+
+			results.forEach(result => {
+				const card = document.createElement('div');
+				card.className =
+					'rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden';
+
+				const content = document.createElement('div');
+				content.className = 'p-4 space-y-2';
+
+				const url = document.createElement('a');
+				url.href = result.original;
+				url.target = '_blank';
+				url.className = 'text-sm font-medium hover:underline';
+				url.textContent = result.original;
+
+				content.appendChild(url);
+
+				if (result.screenshot) {
+					const img = document.createElement('img');
+					img.src = result.screenshot;
+					img.alt = `Screenshot of ${result.original}`;
+					img.className = 'w-full h-auto rounded border';
+					img.loading = 'lazy';
+					card.appendChild(img);
+				} else if (result.error) {
+					const error = document.createElement('p');
+					error.className = 'text-sm text-destructive';
+					error.textContent = `Error: ${result.error}`;
+					content.appendChild(error);
+				}
+
+				card.appendChild(content);
+				screenshotsDiv.appendChild(card);
+			});
+
+			resultsDiv.classList.remove('hidden');
+		}
+
+		// Listen for form submission from UrlInput component
+		document.addEventListener('urlsubmit', ((e: Event) => {
+			const urls = (e as UrlSubmitEvent).detail;
+
+			(async () => {
+				try {
+					setLoading(true);
+					const response = await fetch('/api/screenshot/', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({ urls }),
+					});
+
+					const data = await response.json();
+
+					if (data.success) {
+						displayScreenshots(data.data.urls);
+					} else {
+						throw new Error(data.error || 'Failed to capture screenshots');
+					}
+				} catch (error) {
+					console.error('Screenshot error:', error);
+					// TODO: Add toast notification for errors
+				} finally {
+					setLoading(false);
+				}
+			})();
+		}) as EventListener);
+	</script>
 </Layout>
