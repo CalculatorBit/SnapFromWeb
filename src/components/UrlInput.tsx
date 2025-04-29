@@ -38,7 +38,7 @@ export function UrlInput() {
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
-          <div>
+          <div className="space-y-2">
             <CardTitle>Enter Website URL</CardTitle>
             <CardDescription>
               Paste the URL of the website you want to capture
@@ -72,7 +72,7 @@ export function UrlInput() {
                 name="urls"
                 rows={5}
                 className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                placeholder="Enter multiple URLs (one per line)&#10;https://example1.com&#10;https://example2.com&#10;https://example3.com"
+                placeholder="Enter multiple URLs (one per line)"
                 required
               />
               <Button type="submit" className="w-full">
