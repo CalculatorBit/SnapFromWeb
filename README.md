@@ -68,17 +68,12 @@ For multiple URLs:
 pnpm install
 ```
 
-2. Approve builds: `sharp`, `esbuild`, `puppeteer`
-```bash
-pnpm approve-builds
-```
-
-3. Start the development server:
+2. Start the development server:
 ```bash
 pnpm dev
 ```
 
-4. Build for production:
+3. Build for production:
 ```bash
 pnpm build
 ```

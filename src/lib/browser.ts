@@ -1,6 +1,7 @@
 import type { Browser, LaunchOptions, Page, ScreenshotOptions } from 'puppeteer';
 
 import AdblockerPlugin from 'puppeteer-extra-plugin-adblocker';
+import AnonymizeUAPlugin from 'puppeteer-extra-plugin-anonymize-ua';
 import Stealth from 'puppeteer-extra-plugin-stealth';
 import { addExtra } from 'puppeteer-extra';
 import puppeteer from "puppeteer";
@@ -8,6 +9,7 @@ import puppeteer from "puppeteer";
 const puppeteerExtra = addExtra(puppeteer);
 puppeteerExtra.use(Stealth());
 puppeteerExtra.use(AdblockerPlugin({ blockTrackers: true }));
+puppeteerExtra.use(AnonymizeUAPlugin());
 
 export async function getBrowser(options: LaunchOptions = {}) {
   const browser = await puppeteerExtra.launch({
