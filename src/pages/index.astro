@@ -1,4 +1,5 @@
 ---
+import Hero from '@/components/Hero.astro';
 import { UrlInput } from '@/components/UrlInput';
 import Layout from '@/layouts/Layout.astro';
 
@@ -23,12 +24,7 @@ declare global {
 <Layout title="SnapFromWeb - Website Screenshot Tool">
 	<main class="container mx-auto px-4 py-8">
 		<div class="max-w-4xl mx-auto space-y-8">
-			<div class="text-center space-y-4">
-				<h1 class="text-4xl font-bold tracking-tight">SnapFromWeb</h1>
-				<p class="text-xl text-muted-foreground">
-					Capture clean, ad-free screenshots of any website
-				</p>
-			</div>
+			<Hero />
 
 			<UrlInput client:load />
 

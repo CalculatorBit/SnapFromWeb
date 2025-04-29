@@ -1,0 +1,17 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { Gallery as GalleryComponent } from '@/components/Gallery';
+---
+
+<Layout title="Gallery - SnapFromWeb">
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-7xl mx-auto space-y-8">
+            <div class="text-center space-y-4">
+                <h1 class="text-4xl font-bold tracking-tight">Screenshot Gallery</h1>
+                <p class="text-xl text-muted-foreground">Browse all captured screenshots</p>
+            </div>
+
+            <GalleryComponent client:load />
+        </div>
+    </main>
+</Layout>
