@@ -8,10 +8,44 @@ const { title } = Astro.props;
 <html lang="en">
     <head>
         <title>{title}</title>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        />
+        <!-- Inter Font -->
+        <link
+            rel="preconnect"
+            href="https://fonts.googleapis.com"
+        />
+        <link
+            rel="preconnect"
+            href="https://fonts.gstatic.com"
+            crossorigin
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <!-- Theme initialization -->
+        <script is:inline>
+            (function () {
+                const theme = localStorage.getItem('theme');
+                if (
+                    theme === 'dark' ||
+                    (!theme &&
+                        window.matchMedia('(prefers-color-scheme: dark)')
+                            .matches)
+                ) {
+                    document.documentElement.classList.add('dark');
+                }
+            })();
+        </script>
     </head>
-    <body class="bg-red-10 flex flex-col min-h-screen">
+    <body
+        class="font-sans bg-background text-foreground flex flex-col min-h-screen relative scroll-smooth antialiased">
         <Navigation />
-        <div class="mt-16 flex-grow">
+        <div class="flex-grow">
             <slot />
         </div>
         <Footer />

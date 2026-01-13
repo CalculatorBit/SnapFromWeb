@@ -13,6 +13,11 @@ export default defineConfig({
   output: 'server',
   trailingSlash: 'always',
   integrations: [sitemap(), react(), favicons()],
+  markdown: {
+    shikiConfig: {
+    theme: 'dark-plus',
+  },
+  },
 
   vite: {
     plugins: [tailwindcss()]

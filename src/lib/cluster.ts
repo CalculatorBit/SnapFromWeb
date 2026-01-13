@@ -1,8 +1,8 @@
-import { fileExists, getScreenshotPath, saveScreenshot } from './screenshot';
+import { getCachedScreenshotPath, getScreenshotPath, saveScreenshot } from '@/lib/screenshot';
 
 import { Cluster } from 'puppeteer-cluster';
 import type { Page } from 'puppeteer';
-import { takeScreenshot } from './browser';
+import { takeScreenshot } from '@/lib/browser';
 
 export interface ScreenshotResult {
   url: string;
@@ -38,18 +38,20 @@ export async function launchCluster(options = {}) {
 
   await cluster.task(async ({ page, data: url }: { page: Page; data: string }) => {
     try {
-      // Check if screenshot already exists
-      const outputPath = await getScreenshotPath(url);
-      const exists = await fileExists(outputPath);
+      // Check if screenshot already exists for this hour
+      const cachedPath = await getCachedScreenshotPath(url);
 
-      if (exists) {
+      if (cachedPath) {
         return {
           url,
           success: true,
-          path: outputPath,
+          path: cachedPath,
           cached: true
         };
       }
+
+      // Get the new path (includes current date-hour)
+      const outputPath = await getScreenshotPath(url);
 
       // Configure page
       await page.setViewport({ width: 1920, height: 1080 });

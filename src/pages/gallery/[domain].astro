@@ -1,32 +1,50 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import { DomainGallery } from '@/components/DomainGallery';
-import { ArrowLeft } from 'lucide-react';
 
 const { domain } = Astro.params;
 const decodedDomain = decodeURIComponent(domain || '');
 ---
 
-<Layout title={`${decodedDomain} Screenshots - SnapFromWeb`}>
-    <main class="container mx-auto px-4 py-8">
-        <div class="max-w-7xl mx-auto space-y-8">
-            <div class="flex items-center gap-4">
-                <a
-                    href="/gallery/"
-                    class="text-sm text-muted-foreground hover:text-foreground flex items-center gap-2">
-                    <ArrowLeft className="h-4 w-4" />
-                    Back to Gallery
-                </a>
-            </div>
-            <div class="text-center space-y-4">
-                <h1 class="text-4xl font-bold tracking-tight">{decodedDomain}</h1>
-                <p class="text-xl text-muted-foreground">All captured screenshots</p>
-            </div>
+<Layout title={`${decodedDomain} - SnapFromWeb`}>
+    <main class="pt-20">
+        <section class="container-wrapper">
+            <div class="py-8 px-4">
+                <!-- Header -->
+                <div class="mb-8 flex items-center gap-4">
+                    <a
+                        href="/gallery/"
+                        class="p-2 rounded-lg hover:bg-muted transition-colors"
+                        title="Back to Gallery">
+                        <svg
+                            class="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                            ></path>
+                        </svg>
+                    </a>
+                    <div>
+                        <h1 class="text-xl font-bold tracking-tight">
+                            {decodedDomain}
+                        </h1>
+                        <p class="text-sm text-muted-foreground">
+                            Screenshot timeline
+                        </p>
+                    </div>
+                </div>
 
-            <DomainGallery
-                client:load
-                domain={decodedDomain}
-            />
-        </div>
+                <!-- Gallery -->
+                <DomainGallery
+                    client:load
+                    domain={decodedDomain}
+                />
+            </div>
+        </section>
     </main>
 </Layout>

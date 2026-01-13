@@ -1,10 +1,11 @@
 ---
 import { Image } from 'astro:assets';
 import logo from '@/assets/images/logo.png';
+import { ThemeToggle } from '@/components/ThemeToggle';
 ---
 
 <nav
-    class="fixed top-6 left-1/2 z-50 -translate-x-1/2 px-6 py-2 rounded-full backdrop-blur-md bg-white/20 shadow-lg flex items-center gap-8 border border-white/30">
+    class="fixed top-3 left-1/2 z-50 -translate-x-1/2 px-4 py-2 rounded-full backdrop-blur-md bg-background/80 shadow-lg flex items-center gap-6 border">
     <a
         href="/"
         class="flex items-center gap-2 hover:opacity-80 transition">
@@ -13,13 +14,14 @@ import logo from '@/assets/images/logo.png';
             alt="Snap from Web Logo"
             class="h-6 w-auto rounded-full"
         />
-        <span class="text-base font-bold font-italic hidden sm:inline">Snap From Web</span>
+        <span class="text-sm font-bold hidden sm:inline">SnapFromWeb</span>
     </a>
-    <div class="flex gap-4 ml-4">
+    <div class="flex items-center gap-3">
         <a
             href="/gallery/"
-            class="text-sm text-muted-foreground transition"
+            class="text-sm text-muted-foreground hover:text-foreground transition"
             >Gallery</a
         >
+        <ThemeToggle client:load />
     </div>
 </nav>

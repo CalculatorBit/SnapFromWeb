@@ -1,4 +1,14 @@
 {
-  "recommendations": ["astro-build.astro-vscode"],
+  "recommendations": [
+    "astro-build.astro-vscode",
+    "esbenp.prettier-vscode",
+    "yoavbls.pretty-ts-errors",
+    "redhat.vscode-yaml",
+    "bradlc.vscode-tailwindcss",
+    "tamasfe.even-better-toml",
+    "usernamehw.errorlens",
+    "biomejs.biome",
+    "aaron-bond.better-comments"
+  ],
   "unwantedRecommendations": []
 }
