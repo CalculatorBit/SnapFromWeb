@@ -14,8 +14,8 @@ Thank you for your interest in contributing to SnapFromWeb! We welcome contribut
 1.  **Clone the repository:**
 
     ```bash
-    git clone https://github.com/yourusername/snapfromweb.git
-    cd snapfromweb
+    git clone https://github.com/yourusername/SnapFromWeb.git
+    cd SnapFromWeb
     ```
 
 2.  **Install dependencies:**
