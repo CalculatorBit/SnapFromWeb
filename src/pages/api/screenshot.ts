@@ -1,6 +1,6 @@
-import type { APIRoute, APIContext } from 'astro';
-import { launchCluster, type ScreenshotResult } from '@/lib/cluster';
-import { getPublicScreenshotUrl } from '@/lib/screenshot';
+import type { APIRoute } from 'astro';
+import { takeScreenshots } from '@/lib/cluster';
+import { getPublicScreenshotUrl } from '@/lib/storage';
 
 interface ScreenshotResponse {
   success: boolean;
@@ -46,18 +46,8 @@ export const POST: APIRoute = async (context) => {
       );
     }
 
-    // Initialize cluster
-    const cluster = await launchCluster();
-    let results: ScreenshotResult[] = []; // Initialize as empty array
-
-    // Queue tasks and collect results concurrently
-    try {
-      const screenshotPromises = validUrls.map((url: string) => cluster.execute(url));
-      results = (await Promise.all(screenshotPromises)) as ScreenshotResult[];
-    } finally {
-      await cluster.idle(); // Wait for all tasks to finish
-      await cluster.close(); // Then close the cluster
-    }
+    // Take screenshots using singleton cluster (browser stays open)
+    const results = await takeScreenshots(validUrls);
 
     // Format response
     const formattedUrls = await Promise.all(
