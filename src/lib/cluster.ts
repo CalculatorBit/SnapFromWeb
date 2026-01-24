@@ -26,7 +26,7 @@ const defaultClusterOptions = {
 };
 
 const defaultPuppeteerOptions = {
-  headless: Boolean(HEADLESS_BROWSER),
+  headless: HEADLESS_BROWSER === 'true' || HEADLESS_BROWSER === '1',
   args: [
     '--no-sandbox',
     '--disable-setuid-sandbox',
